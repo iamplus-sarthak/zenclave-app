@@ -1,0 +1,127 @@
+{
+    "id": "demo-2",
+    "title": "Modern CI/CD Pipeline Architecture",
+    "pdfUrl": "/reports/ci-cd-setup.pdf",
+    "summary": "This technical guide outlines the architecture for a scalable Continuous Integration and Continuous Deployment (CI/CD) pipeline designed for microservices. It covers automated testing strategies, containerization with Docker, and zero-downtime deployment patterns using Kubernetes. Key focus areas include security scanning (DevSecOps), artifact management, and automated rollback mechanisms.",
+    "stats": {
+        "totalViews": "4,102",
+        "avgTime": "8m 45s",
+        "completion": "92%",
+        "activeReaders": "128"
+    },
+    "initialQuestionIds": [
+        "q1",
+        "q2",
+        "q3"
+    ],
+    "questions": [
+        {
+            "id": "q1",
+            "text": "What are the core stages defined in this pipeline?",
+            "answer": "The pipeline is divided into four critical stages to ensure code quality and deployment stability:\n\n1. **Build & Unit Test**: Compiling source code and running isolated unit tests using Jest.\n2. **Static Analysis**: Linting and SAST security scans to catch vulnerabilities early.\n3. **Containerization**: Building Docker images and pushing them to a secure registry.\n4. **Deployment**: Applying manifests to the Kubernetes cluster.\n\nYou can review the [detailed visual architecture here](https://example.com/pipeline-viz).",
+            "category": "Architecture",
+            "icon": "Layers",
+            "nextQuestionIds": [
+                "q1a",
+                "q1b",
+                "q1c"
+            ]
+        },
+        {
+            "id": "q1a",
+            "text": "Which tools are recommended for these stages?",
+            "answer": "For orchestration, **GitHub Actions** is recommended due to its seamless integration with the repository. For artifact storage, we use **JFrog Artifactory**. For static analysis, **SonarQube** is the standard. [See the full tool comparison matrix](https://example.com/tools).",
+            "category": "Tools",
+            "icon": "Hammer",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q1b",
+            "text": "How is security (DevSecOps) integrated?",
+            "answer": "Security is 'shifted left' by integrating **Snyk** for dependency scanning and **Trivy** for container vulnerability scanning directly into the build stage. Builds with critical vulnerabilities are automatically failed to prevent insecure code from merging.",
+            "category": "Security",
+            "icon": "Shield",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q1c",
+            "text": "How does it handle scalability for large teams?",
+            "answer": "The pipeline utilizes **self-hosted runners** with auto-scaling groups on AWS. This ensures that concurrent builds from multiple teams do not get queued, maintaining a feedback loop of under 10 minutes even during peak hours.",
+            "category": "Scaling",
+            "icon": "TrendingUp",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q2",
+            "text": "How does this setup ensure zero downtime?",
+            "answer": "Zero downtime is achieved using **Rolling Updates** within Kubernetes. The strategy configures `maxUnavailable: 25%` and `maxSurge: 25%`, ensuring that old pods are only terminated once new pods are healthy and ready to serve traffic. For higher risk deployments, a [Blue-Green strategy](https://example.com/blue-green) is supported.",
+            "category": "Deployment",
+            "icon": "Activity",
+            "nextQuestionIds": [
+                "q2a",
+                "q2b",
+                "q2c"
+            ]
+        },
+        {
+            "id": "q2a",
+            "text": "What happens if a deployment fails?",
+            "answer": "Automated rollbacks are configured using **Helm**. If the strict health checks (liveness/readiness probes) fail for more than 60 seconds after a rollout, the system automatically reverts to the previous stable revision to minimize user impact.",
+            "category": "Rollback",
+            "icon": "RotateCcw",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q2b",
+            "text": "How are database migrations handled?",
+            "answer": "Database migrations are run as Kubernetes `initContainers` or separate 'pre-install' hooks in Helm. This ensures schema changes are successfully applied and validated *before* the new application code starts accepting traffic.",
+            "category": "Database",
+            "icon": "Database",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q2c",
+            "text": "How is environment configuration managed?",
+            "answer": "We use a **GitOps** approach with ArgoCD. All environment-specific configurations (staging, prod) are stored as Kubernetes manifests in a separate `config-repo`. Changes to this repo automatically trigger a sync in the cluster.",
+            "category": "Config",
+            "icon": "Settings",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q3",
+            "text": "What testing strategies are enforced?",
+            "answer": "The guide mandates a strict 'Testing Pyramid' approach to maintain velocity: \n- **70% Unit Tests** (Jest/JUnit) for fast feedback.\n- **20% Integration Tests** (API contract testing) to verify service boundaries.\n- **10% End-to-End Tests** (Cypress/Playwright) for critical user flows.\n\nCoverage reports are generated automatically. [View sample coverage report](https://example.com/coverage).",
+            "category": "Quality",
+            "icon": "CheckCircle",
+            "nextQuestionIds": [
+                "q3a",
+                "q3b",
+                "q3c"
+            ]
+        },
+        {
+            "id": "q3a",
+            "text": "How are flaky E2E tests managed?",
+            "answer": "Flaky tests are isolated in a separate 'quarantine' pipeline to prevent blocking production releases. They are flagged for immediate review and must pass 3 consecutive runs to be reintegrated into the main suite.",
+            "category": "QA",
+            "icon": "AlertTriangle",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q3b",
+            "text": "Are there performance tests?",
+            "answer": "Yes, we implement **k6** for load testing. A nightly performance regression suite runs against the staging environment to ensure that new changes do not degrade API latency below the defined SLIs.",
+            "category": "Perf",
+            "icon": "Zap",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q3c",
+            "text": "How do we test microservice integrations?",
+            "answer": "We use **Consumer-Driven Contract Testing** (Pact) to ensure that changes in a service provider (e.g., User Service) do not break the expectations of its consumers (e.g., Order Service) before deployment.",
+            "category": "Contracts",
+            "icon": "Link",
+            "nextQuestionIds": []
+        }
+    ]
+}
