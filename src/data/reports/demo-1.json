@@ -1,0 +1,127 @@
+{
+    "id": "demo-1",
+    "title": "Q3 Market Analysis",
+    "pdfUrl": "/reports/dummy-report.pdf",
+    "summary": "This report highlights a 14% increase in market share across the APAC region, primarily driven by the new product launch in June. However, supply chain constraints remain a critical bottleneck for Q4 projections.",
+    "stats": {
+        "totalViews": "2,543",
+        "avgTime": "4m 12s",
+        "completion": "87%",
+        "activeReaders": "342"
+    },
+    "initialQuestionIds": [
+        "q1",
+        "q2",
+        "q3"
+    ],
+    "questions": [
+        {
+            "id": "q1",
+            "text": "What are the key growth drivers for Q3?",
+            "answer": "The primary growth driver was the successful launch of the 'ZenStream' product line in the APAC region, which contributed to a 14% market share increase. See the [full analysis here](https://example.com/growth). Additionally, a 5% uptick in recurring revenue from legacy contracts supported the bottom line.",
+            "category": "Growth",
+            "icon": "BarChart3",
+            "nextQuestionIds": [
+                "q1a",
+                "q1b",
+                "q1c"
+            ]
+        },
+        {
+            "id": "q2",
+            "text": "Can you summarize the risk factors mentioned?",
+            "answer": "The report identifies two main risks: 1) Supply chain bottlenecks affecting Q4 delivery timelines, specifically for semiconductor components. 2) Currency fluctuation risks in the EMEA market which could impact profit margins by up to 2.5%.",
+            "category": "Risk",
+            "icon": "HelpCircle",
+            "nextQuestionIds": [
+                "q2a",
+                "q2b",
+                "q2c"
+            ]
+        },
+        {
+            "id": "q3",
+            "text": "How does this compare to last year's performance?",
+            "answer": "In comparison to Q3 of last year, YoY revenue is up by 18%. While operating costs have increased by 12% due to inflation, the net profit margin has actually improved by 150 basis points due to operational efficiencies.",
+            "category": "Performance",
+            "icon": "Sparkles",
+            "nextQuestionIds": [
+                "q3a",
+                "q3b",
+                "q3c"
+            ]
+        },
+        {
+            "id": "q1a",
+            "text": "Tell me more about ZenStream.",
+            "answer": "ZenStream is the new real-time analytics suite features launched in June...",
+            "category": "Product",
+            "icon": "Zap",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q1b",
+            "text": "Which APAC countries led the growth?",
+            "answer": "Singapore and Japan were the top performers...",
+            "category": "Region",
+            "icon": "Globe",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q1c",
+            "text": "What are legacy contracts?",
+            "answer": "These are long-term maintenance agreements signed before 2023...",
+            "category": "Revenue",
+            "icon": "FileText",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q2a",
+            "text": "When will supply chains recover?",
+            "answer": "Projections indicate stabilization by Q2 next year...",
+            "category": "Supply Chain",
+            "icon": "Truck",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q2b",
+            "text": "Which components are affected?",
+            "answer": "Primarily 5nm logic chips sourced from Taiwan...",
+            "category": "Tech",
+            "icon": "Cpu",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q2c",
+            "text": "How to mitigate currency risk?",
+            "answer": "We are employing hedging strategies using forward contracts...",
+            "category": "Finance",
+            "icon": "DollarSign",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q3a",
+            "text": "Breakdown the operating costs.",
+            "answer": "Main increases were in logistics (fuel surcharge) and salaries...",
+            "category": "Cost",
+            "icon": "PieChart",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q3b",
+            "text": "What efficiencies were improved?",
+            "answer": "We automated the billing reconciliation process...",
+            "category": "Ops",
+            "icon": "Settings",
+            "nextQuestionIds": []
+        },
+        {
+            "id": "q3c",
+            "text": "Is the 18% growth sustainable?",
+            "answer": "We forecast a stabilization to 12% YoY growth next quarter...",
+            "category": "Forecast",
+            "icon": "TrendingUp",
+            "nextQuestionIds": []
+        }
+    ]
+}
