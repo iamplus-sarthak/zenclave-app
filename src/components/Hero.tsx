@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Hero() {
     return (
-        <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-gradient-to-br from-[#F8FAFC] via-[#E0F2FE] to-[#F0FDFA]">
+        <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#0A2540]">
             {/* Background Blob */}
             <div className="absolute top-[-50%] right-[-20%] w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(0,212,170,0.1)_0%,transparent_70%)] rounded-full animate-float pointer-events-none"></div>
 
@@ -17,26 +17,26 @@ export default function Hero() {
                         </div>
                     </div>
 
-                    <h1 className="font-display text-[64px] font-extrabold leading-[1.1] text-[#0A2540] mb-4 tracking-tighter">
+                    <h1 className="font-display text-[64px] font-extrabold leading-[1.1] text-white mb-4 tracking-tighter">
                         Content That Adapts <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#00D4AA] to-[#00b890]">
                             to You
                         </span>
                     </h1>
 
-                    <h2 className="text-[24px] font-bold text-[#0A2540]/80 mb-6">
+                    <h2 className="text-[24px] font-bold text-white/90 mb-6">
                         Consume Content Faster With AI Powered Assistance
                     </h2>
 
-                    <p className="text-[18px] text-[#64748B] mb-10 leading-[1.7] max-w-lg">
+                    <p className="text-[18px] text-[#94A3B8] mb-10 leading-[1.7] max-w-lg">
                         Interactive reports and videos that let you explore what matters—skip what doesn't. No more 40-page PDFs. No more passive scrolling. Just the insights you actually need.
                     </p>
 
                     <div className="flex gap-4">
-                        <Link href="/get-started" className="px-8 py-4 bg-[#0A2540] text-white rounded-xl font-semibold text-[16px] hover:bg-[#1a3a5a] hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300">
+                        <Link href="/get-started" className="px-8 py-4 bg-[#00D4AA] text-white rounded-xl font-semibold text-[16px] hover:bg-[#00b890] hover:-translate-y-0.5 hover:shadow-xl transition-all duration-300">
                             Get Started
                         </Link>
-                        <Link href="#demo" className="px-8 py-4 bg-white text-[#0A2540] border-2 border-[#E2E8F0] rounded-xl font-semibold text-[16px] hover:bg-[#F8FAFC] hover:border-[#00D4AA] transition-all duration-300">
+                        <Link href="#demo" className="px-8 py-4 bg-transparent text-white border-2 border-white/20 rounded-xl font-semibold text-[16px] hover:bg-white/5 hover:border-white transition-all duration-300">
                             View Demo
                         </Link>
                     </div>
