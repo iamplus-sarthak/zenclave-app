@@ -7,23 +7,33 @@ export default function CTA() {
             {/* Background Blob */}
             <div className="absolute top-[-50%] left-[-20%] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(0,212,170,0.2)_0%,transparent_70%)] rounded-full pointer-events-none"></div>
 
-            <div className="max-w-[900px] mx-auto text-center relative z-10">
-                <h2 className="font-display text-[48px] font-extrabold text-white mb-5 tracking-tight">
-                    Ready to Transform Your Reports?
+            <div className="max-w-[700px] mx-auto text-center relative z-10">
+                <span className="inline-block text-[13px] font-bold text-[#94A3B8] uppercase tracking-widest mb-6">
+                    STAY IN THE LOOP
+                </span>
+
+                <h2 className="font-display text-[48px] font-extrabold text-white mb-6 tracking-tight">
+                    New Insights, Delivered Weekly
                 </h2>
 
-                <p className="text-[20px] text-white/85 mb-10 leading-[1.7]">
-                    Join forward-thinking companies that are turning static documents into dynamic assets.
+                <p className="text-[18px] text-[#94A3B8] mb-10 leading-relaxed">
+                    Get notified when new interactive reports and videos drop. No spam, just content.
                 </p>
 
-                <div className="flex gap-4 justify-center">
-                    <Link href="/get-started" className="px-10 py-4 bg-[#00D4AA] text-white rounded-xl font-semibold text-[17px] hover:bg-[#00b890] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-[#00D4AA]/30 transition-all duration-300">
-                        Get Started Now
-                    </Link>
-                    <button className="px-10 py-4 bg-transparent text-white border-2 border-white/20 rounded-xl font-semibold text-[17px] hover:bg-white/10 hover:border-white transition-all duration-300">
-                        Contact Sales
+                <div className="flex gap-4 max-w-[500px] mx-auto">
+                    <input
+                        type="email"
+                        placeholder="Your email address"
+                        className="flex-1 bg-[#112d4e] border border-white/10 rounded-xl px-6 py-4 text-white placeholder:text-[#64748B] focus:outline-none focus:border-[#00D4AA] transition-colors"
+                    />
+                    <button className="px-8 py-4 bg-[#00D4AA] text-[#0A2540] rounded-xl font-bold text-[16px] hover:bg-[#00b890] transition-colors">
+                        Subscribe
                     </button>
                 </div>
+
+                <p className="text-[14px] text-[#64748B] mt-6">
+                    Unsubscribe anytime. We respect your inbox.
+                </p>
             </div>
         </section>
     );

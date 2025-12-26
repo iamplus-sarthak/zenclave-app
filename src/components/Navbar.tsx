@@ -40,8 +40,8 @@ export default function Navbar() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="#pricing" className="text-[#64748B] font-medium text-[15px] hover:text-[#0A2540] transition-colors relative group">
-                                Pricing
+                            <Link href="#resources" className="text-[#64748B] font-medium text-[15px] hover:text-[#0A2540] transition-colors relative group">
+                                Resources
                                 <span className="absolute bottom-[-4px] left-0 w-0 h-[2px] bg-[#00D4AA] transition-all duration-300 group-hover:w-full"></span>
                             </Link>
                         </li>

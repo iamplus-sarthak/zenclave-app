@@ -10,20 +10,26 @@ export default function Hero() {
             <div className="max-w-[1400px] mx-auto px-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10 w-full">
                 {/* Content */}
                 <div className="flex flex-col justify-center animate-slide-in-left">
-                    <div className="inline-flex items-center gap-2 text-[13px] font-medium text-[#64748B] mb-6">
-                        <span className="w-2 h-2 bg-[#00D4AA] rounded-full"></span>
-                        Reimagining Report Consumption
+                    <div className="inline-flex items-start self-start">
+                        <div className="inline-flex items-center gap-2 text-[14px] font-medium text-[#00D4AA] bg-[#00D4AA]/10 px-4 py-2 rounded-full border border-[#00D4AA]/20 mb-6">
+                            <span className="w-2 h-2 bg-[#00D4AA] rounded-full"></span>
+                            Interactive Reports & Video Insights
+                        </div>
                     </div>
 
-                    <h1 className="font-display text-[64px] font-extrabold leading-[1.1] text-[#0A2540] mb-6 tracking-tighter">
-                        Transform Your <br />
+                    <h1 className="font-display text-[64px] font-extrabold leading-[1.1] text-[#0A2540] mb-4 tracking-tighter">
+                        Content That Adapts <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-br from-[#00D4AA] to-[#00b890]">
-                            Business Intelligence
+                            to You
                         </span>
                     </h1>
 
-                    <p className="text-[20px] text-[#64748B] mb-10 leading-[1.7] max-w-lg">
-                        Turn static PDF reports into engaging, conversational experiences that drive deeper insights and better decision-making.
+                    <h2 className="text-[24px] font-bold text-[#0A2540]/80 mb-6">
+                        Consume Content Faster With AI Powered Assistance
+                    </h2>
+
+                    <p className="text-[18px] text-[#64748B] mb-10 leading-[1.7] max-w-lg">
+                        Interactive reports and videos that let you explore what matters—skip what doesn't. No more 40-page PDFs. No more passive scrolling. Just the insights you actually need.
                     </p>
 
                     <div className="flex gap-4">

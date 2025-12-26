@@ -4,6 +4,7 @@ import Features from "@/components/Features";
 import Services from "@/components/Services";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import WhyZenclave from "@/components/WhyZenclave";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <Features />
       <Services />
+      <WhyZenclave />
       <CTA />
       <Footer />
     </main>

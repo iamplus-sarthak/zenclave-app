@@ -36,40 +36,59 @@ const features = [
 
 export default function Features() {
     return (
-        <section id="features" className="py-32 px-10 bg-white">
+        <section id="features" className="py-32 px-10 bg-[#0A2540] text-white">
             <div className="max-w-[1400px] mx-auto">
                 {/* Header */}
                 <div className="text-center mb-20">
-                    <span className="inline-block px-4 py-2 bg-[#F8FAFC] border border-[#E2E8F0] rounded-full text-[13px] font-semibold text-[#00D4AA] uppercase tracking-wide mb-4">
-                        Why Zenclave
+                    <span className="inline-block text-[13px] font-bold text-[#94A3B8] uppercase tracking-widest mb-4">
+                        THE OLD WAY
                     </span>
-                    <h2 className="font-display text-[48px] font-extrabold text-[#0A2540] mb-5 tracking-tight">
-                        Features that Empower
+                    <h2 className="font-display text-[48px] font-extrabold text-white mb-5 tracking-tight">
+                        Professional Content Wasn't <br />
+                        Built for How You Actually Work
                     </h2>
-                    <p className="text-[20px] text-[#64748B] max-w-[700px] mx-auto leading-relaxed">
-                        Everything you need to turn passive readers into active participants.
+                    <p className="text-[18px] text-[#94A3B8] max-w-[700px] mx-auto leading-relaxed">
+                        You're busy. You need answers fast. But most professional content still comes in one format: long, linear, one-size-fits-all.
                     </p>
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {features.map((feature, idx) => (
-                        <div key={idx} className="group bg-[#F8FAFC] border border-[#E2E8F0] rounded-[20px] p-10 transition-all duration-300 hover:bg-white hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(10,37,64,0.08)] relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00D4AA] to-[#00b890] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
-
-                            <div className="w-16 h-16 bg-gradient-to-br from-[#00D4AA] to-[#00b890] rounded-2xl flex items-center justify-center mb-6">
-                                {feature.icon}
-                            </div>
-
-                            <h3 className="font-display text-[22px] font-bold text-[#0A2540] mb-3">
-                                {feature.title}
-                            </h3>
-
-                            <p className="text-[15px] text-[#64748B] leading-relaxed">
-                                {feature.description}
-                            </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* Card 1 */}
+                    <div className="bg-[#112d4e] border border-white/10 rounded-[24px] p-8 flex items-start gap-4 hover:bg-[#1a3a5a] transition-colors duration-300">
+                        <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
                         </div>
-                    ))}
+                        <p className="text-[16px] text-[#94A3B8] leading-relaxed">
+                            PDFs that bury insights in walls of text you don't have time to read
+                        </p>
+                    </div>
+
+                    {/* Card 2 */}
+                    <div className="bg-[#112d4e] border border-white/10 rounded-[24px] p-8 flex items-start gap-4 hover:bg-[#1a3a5a] transition-colors duration-300">
+                        <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <p className="text-[16px] text-[#94A3B8] leading-relaxed">
+                            Videos you can't skip or navigate to the parts that matter to you
+                        </p>
+                    </div>
+
+                    {/* Card 3 */}
+                    <div className="bg-[#112d4e] border border-white/10 rounded-[24px] p-8 flex items-start gap-4 hover:bg-[#1a3a5a] transition-colors duration-300">
+                        <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <p className="text-[16px] text-[#94A3B8] leading-relaxed">
+                            No way to quickly find what's relevant to your specific role or needs
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
