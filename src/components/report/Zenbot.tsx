@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Sparkles, MessageSquare, ChevronRight } from 'lucide-react';
+import { Sparkles, ChevronRight, Brain } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import TypingIndicator from './TypingIndicator';
 import CTAForm from './CTAForm';
 import Typewriter from './Typewriter';
 
@@ -13,6 +12,7 @@ interface Question {
   answer: string;
   icon: string;
   nextQuestionIds?: string[];
+  isCTA?: boolean;
 }
 
 interface Report {
@@ -25,57 +25,38 @@ interface ZenbotProps {
   report: Report | null;
 }
 
-interface Message {
-  id: string;
-  type: 'bot' | 'user';
-  content: React.ReactNode;
-}
+type ConversationItem =
+  | { type: 'summary'; text: string }
+  | { type: 'qa'; question: string; answer: string | null; loading: boolean; id: string };
 
 export default function Zenbot({ report }: ZenbotProps) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [conversation, setConversation] = useState<ConversationItem[]>([]);
   const [suggestedQuestions, setSuggestedQuestions] = useState<Question[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [interactionCount, setInteractionCount] = useState(0);
+
+  // flow control
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isStreaming, setIsStreaming] = useState(false); // Controls if user can click
   const [showCTA, setShowCTA] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Initial Summary & Questions Setup
+  // 1. Initial Loading Sequence (4 seconds)
   useEffect(() => {
-    if (report && messages.length === 0) {
-      // 1. Set Initial Summary Message
-      setMessages([
-        {
-          id: 'init-summary',
-          type: 'bot',
-          content: (
-            <div className="bg-gradient-to-br from-[#F0FDFA] to-[#ECFDF5] border border-[#00D4AA]/20 rounded-2xl p-6 relative w-full">
-              <div className="absolute top-4 left-[-8px] w-0 h-0 border-t-[8px] border-t-transparent border-r-[12px] border-r-[#F0FDFA] border-b-[8px] border-b-transparent"></div>
-              <h3 className="text-[16px] font-bold text-[#0A2540] mb-3 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[#00D4AA]" />
-                Executive Summary
-              </h3>
-              <p className="text-[14px] text-[#334155] leading-relaxed mb-4">
-                {report.summary}
-              </p>
-              <div className="flex gap-2">
-                <span className="inline-flex px-2.5 py-1 bg-white/60 border border-[#00D4AA]/20 rounded text-[11px] font-medium text-[#00D4AA]">
-                  #Growth
-                </span>
-                <span className="inline-flex px-2.5 py-1 bg-white/60 border border-[#00D4AA]/20 rounded text-[11px] font-medium text-[#00D4AA]">
-                  #Trends
-                </span>
-              </div>
-            </div>
-          )
-        }
-      ]);
+    if (report && conversation.length === 0) {
+      const timer = setTimeout(() => {
+        setIsInitialLoading(false);
+        setIsStreaming(true);
 
-      const initialIds = report.initialQuestionIds || [];
-      const initialQs = report.questions.filter(q => initialIds.includes(q.id));
-      setSuggestedQuestions(initialQs.length > 0 ? initialQs : report.questions.slice(0, 3));
+        setConversation([
+          { type: 'summary', text: report.summary }
+        ]);
+
+        // We need to wait for summary typing to finish to enable questions?
+        // We'll handle that via Typewriter callback in render
+      }, 4000);
+
+      return () => clearTimeout(timer);
     }
-  }, [report, messages.length]);
+  }, [report, conversation.length]);
 
   // Gentle Auto-scroll
   useEffect(() => {
@@ -84,149 +65,217 @@ export default function Zenbot({ report }: ZenbotProps) {
         scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
       }, 100);
     }
-  }, [messages.length, isTyping]);
+  }, [conversation, isInitialLoading, showCTA]);
 
   const handleQuestionClick = (question: Question) => {
-    if (showCTA || isStreaming) return;
+    if (showCTA || isStreaming || isInitialLoading) return;
 
-    // 1. User Message (Chat Bubble Right)
-    const userMsgId = Date.now().toString();
-    setMessages(prev => [...prev, {
-      id: userMsgId,
-      type: 'user',
-      content: <div className="bg-[#0A2540] text-white px-5 py-3 rounded-2xl rounded-tr-sm text-[14px] shadow-sm">{question.text}</div>
-    }]);
+    // SCENARIO: CTA Trigger
+    if (question.isCTA) {
+      setShowCTA(true);
+      setSuggestedQuestions([]);
+      // Optional: Add the question as a "user message" but no bot answer?
+      // User asked: "Answer will not be there for that question... answer will be set as CTA form giving question"
+      // Let's create a QA item but with empty answer/loading false effectively logic-wise,
+      // OR just show CTA.
+      // Showing "Ready to transform?" as a User bubble provides context.
+      // But the design says "like answer will not be there... that will be set as the CTA form giving question".
+      // Let's add the QA item, but bypass Thinking/Answering and just show the CTA form BELOW it.
+      // Actually, if I add it as a QA item, it needs an answer or stays loading.
+      // Let's just NOT add it to conversation, and rely on `showCTA` being true at the bottom?
+      // But then previous content is visible.
+      // Design choice: Just show CTA form at bottom.
+      return;
+    }
 
+    setIsStreaming(true); // Lock interactions
     setSuggestedQuestions([]);
-    setIsTyping(true);
 
-    // 2. Thinking Delay (2.5s)
+    // Add QA item in loading state
+    const newId = Date.now().toString();
+    setConversation(prev => [
+      ...prev,
+      { type: 'qa', question: question.text, answer: null, loading: true, id: newId }
+    ]);
+
+    // Thinking Delay (3 seconds)
     setTimeout(() => {
-      setIsTyping(false);
-      setIsStreaming(true);
+      // Update item to loaded
+      setConversation(prev => prev.map(item => {
+        if (item.type === 'qa' && item.id === newId) {
+          return { ...item, loading: false, answer: question.answer };
+        }
+        return item;
+      }));
 
-      // 3. Bot Message
-      setMessages(prev => [...prev, {
-        id: `ans-${userMsgId}`,
-        type: 'bot',
-        content: (
-          <div className="bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm p-6 text-[15px] text-[#334155] leading-relaxed shadow-sm w-full">
-            <Typewriter
-              text={question.answer}
-              speed={15}
-              onComplete={() => {
-                setIsStreaming(false);
-
-                if (report && question.nextQuestionIds && question.nextQuestionIds.length > 0) {
-                  const nextQs = report.questions.filter(q => question.nextQuestionIds?.includes(q.id));
-                  setSuggestedQuestions(nextQs);
-                } else {
-                  setSuggestedQuestions([]);
-                }
-
-                const newCount = interactionCount + 1;
-                setInteractionCount(newCount);
-                if (newCount >= 2) {
-                  setShowCTA(true);
-                  setSuggestedQuestions([]);
-                }
-              }}
-            />
-          </div>
-        )
-      }]);
-
-    }, 2500);
+    }, 3000);
   };
 
-  if (!report) return <div className="p-10 flex justify-center"><TypingIndicator /></div>;
+  const handleTypewriterComplete = (item: ConversationItem) => {
+    setIsStreaming(false);
+
+    if (item.type === 'summary' && report) {
+      const initialIds = report.initialQuestionIds || [];
+      const initialQs = report.questions.filter(q => initialIds.includes(q.id));
+      setSuggestedQuestions(initialQs.length > 0 ? initialQs : report.questions.slice(0, 3));
+    }
+
+    if (item.type === 'qa' && report) {
+      // Find the question object to get next IDs
+      // We don't have the question object here easily unless we store nextIds in the item
+      // Let's do a lookup
+      const qObj = report.questions.find(q => q.text === item.question);
+
+      if (qObj && qObj.nextQuestionIds && qObj.nextQuestionIds.length > 0) {
+        const nextQs = report.questions.filter(q => qObj.nextQuestionIds?.includes(q.id));
+        setSuggestedQuestions(nextQs);
+      } else {
+        // If no next questions defined, maybe show initial ones or nothing?
+        // Requirement: "further series of questions should be in that way".
+        // If array is empty, we stop?
+        setSuggestedQuestions([]);
+      }
+    }
+  };
+
+  if (!report) return null;
 
   return (
-    <div className="w-1/2 flex flex-col h-full bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+    <div className="w-1/2 flex flex-col h-full bg-white border-l border-[#E2E8F0] relative overflow-hidden">
 
       {/* Bot Header */}
-      <div className="h-14 border-b border-[#E2E8F0] bg-[#FAFBFC] flex items-center px-5 gap-3 flex-shrink-0">
-        <div className="w-8 h-8 bg-gradient-to-br from-[#00D4AA] to-[#00b890] rounded-lg flex items-center justify-center shadow-sm">
-          <Sparkles className="w-4 h-4 text-white" />
+      <div className="min-h-16 border-b border-[#E2E8F0]/50 bg-white/80 backdrop-blur-sm sticky top-0 z-10 flex items-center px-6 gap-3">
+        <div className="w-10 h-10 bg-[#E0F2FE] rounded-xl flex items-center justify-center shadow-sm">
+          <Brain className="w-5 h-5 text-[#0A2540]" />
         </div>
         <div>
-          <div className="text-[14px] font-bold text-[#0A2540]">Zenbot AI</div>
-          <div className="text-[11px] text-[#64748B] flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 bg-[#10B981] rounded-full animate-pulse"></span>
-            Online & Ready
+          <div className="text-[15px] font-bold text-[#0A2540] flex items-center gap-2">
+            Intelligent Insights
+            <Sparkles className="w-3.5 h-3.5 text-[#00D4AA]" />
+          </div>
+          <div className="text-[12px] text-[#64748B]">
+            {isInitialLoading ? 'Analyzing the report...' : 'AI-powered interactive exploration'}
           </div>
         </div>
       </div>
 
-      {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-6 scroll-smooth space-y-8" ref={scrollRef}>
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-y-auto p-8 scroll-smooth" ref={scrollRef}>
 
-        {messages.map((msg) => (
-          <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start w-full'}`}>
-            <div className={`${msg.type === 'user' ? 'max-w-[85%]' : 'w-full'} ${msg.type === 'bot' ? 'animate-fade-in-up' : 'animate-slide-in-right'}`}>
-              {msg.content}
+        {/* Scenario 1: Initial Loading Screen */}
+        {isInitialLoading && (
+          <div className="h-full flex flex-col items-center justify-center animate-fade-in-up">
+            <div className="flex gap-2 mb-6">
+              <div className="w-3 h-3 bg-[#94A3B8] rounded-full animate-bounce delay-0"></div>
+              <div className="w-3 h-3 bg-[#94A3B8] rounded-full animate-bounce delay-150"></div>
+              <div className="w-3 h-3 bg-[#94A3B8] rounded-full animate-bounce delay-300"></div>
             </div>
-          </div>
-        ))}
-
-        {isTyping && (
-          <div className="flex justify-start animate-fade-in-up w-full">
-            <div className="bg-white border border-[#E2E8F0] rounded-2xl rounded-tl-sm p-4 shadow-sm flex items-center gap-3">
-              <span className="text-xs text-gray-400 font-medium">Zenbot is thinking...</span>
-              <TypingIndicator />
-            </div>
+            <p className="text-[#64748B] text-[15px] font-medium animate-pulse">
+              Preparing your personalized insights...
+            </p>
           </div>
         )}
 
-        {/* Suggested Questions */}
-        {!isTyping && !isStreaming && !showCTA && suggestedQuestions.length > 0 && (
-          <div className="animate-fade-in-up delay-[200ms] w-full">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="h-[1px] bg-[#E2E8F0] flex-1"></div>
-              <div className="text-[12px] font-semibold text-[#94A3B8] uppercase tracking-wider px-1">
-                Suggested Questions
-              </div>
-              <div className="h-[1px] bg-[#E2E8F0] flex-1"></div>
-            </div>
+        {/* Conversation Flow */}
+        {!isInitialLoading && (
+          <div className="space-y-8">
+            {conversation.map((item, idx) => (
+              <div key={idx} className="animate-fade-in-up">
+                {item.type === 'summary' && (
+                  <div className="bg-white rounded-2xl p-0 text-[15px] text-[#334155] leading-relaxed">
+                    <h3 className="text-[16px] font-bold text-[#0A2540] mb-3">Executive Summary</h3>
+                    <Typewriter
+                      text={item.text}
+                      speed={10}
+                      onComplete={() => handleTypewriterComplete(item)}
+                    />
+                    <div className="text-[12px] text-[#94A3B8] mt-4">
+                      Source: Executive Summary, Pages 1-3
+                    </div>
+                  </div>
+                )}
 
-            <div className="space-y-3">
-              {suggestedQuestions.map((q) => {
-                // @ts-ignore
-                const IconComponent = Icons[q.icon] || Icons.HelpCircle;
+                {item.type === 'qa' && (
+                  <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0]/50 shadow-sm">
+                    {/* Question Header */}
+                    <h3 className="text-[16px] font-bold text-[#0A2540] mb-4">
+                      {item.question}
+                    </h3>
 
-                return (
-                  <button
-                    key={q.id}
-                    onClick={() => handleQuestionClick(q)}
-                    className="w-full text-left group bg-white border border-[#E2E8F0] hover:border-[#00D4AA] hover:shadow-md hover:-translate-y-0.5 rounded-xl p-4 transition-all duration-200"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-[#F8FAFC] group-hover:bg-[#F0FDFA] rounded-full flex items-center justify-center transition-colors">
-                        <IconComponent className="w-4 h-4 text-[#64748B] group-hover:text-[#00D4AA]" />
+                    {/* Answer Area */}
+                    {item.loading ? (
+                      // Scenario 2: Thinking State (Inside the card)
+                      <div className="flex flex-col items-center justify-center py-10 animate-fade-in-up">
+                        <div className="w-12 h-12 rounded-full border-2 border-[#E2E8F0] border-t-[#00D4AA] animate-spin mb-4"></div>
+                        <div className="flex items-center gap-1 text-[#0A2540] font-medium text-[14px]">
+                          Thinking
+                          <span className="animate-pulse">.</span>
+                          <span className="animate-pulse delay-150">.</span>
+                          <span className="animate-pulse delay-300">.</span>
+                        </div>
+                        <p className="text-[12px] text-[#94A3B8] mt-2">
+                          Extracting relevant insights from the report
+                        </p>
                       </div>
-                      <span className="text-[14px] font-medium text-[#0A2540] flex-1">
+                    ) : (
+                      // Answer with Typewriter
+                      <div className="text-[15px] text-[#334155] leading-relaxed">
+                        {item.answer && (
+                          <Typewriter
+                            text={item.answer}
+                            speed={15}
+                            onComplete={() => handleTypewriterComplete(item)}
+                          />
+                        )}
+                        {/* Source footer? */}
+                        <div className="text-[12px] text-[#94A3B8] mt-4 pt-4 border-t border-[#E2E8F0]/50">
+                          Source: Report Analysis
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            {/* Suggested Questions (Bottom) */}
+            {!isStreaming && !showCTA && suggestedQuestions.length > 0 && (
+              <div className="pt-4 animate-fade-in-up">
+                <div className="text-[12px] font-bold text-[#94A3B8] uppercase tracking-wider mb-4">
+                  EXPLORE MORE INSIGHTS
+                </div>
+                <div className="space-y-3">
+                  {suggestedQuestions.map((q) => (
+                    <button
+                      key={q.id}
+                      onClick={() => handleQuestionClick(q)}
+                      className="w-full text-left group bg-white border border-[#E2E8F0] hover:border-[#00D4AA] hover:shadow-md rounded-xl p-4 transition-all duration-200 flex items-center gap-4"
+                    >
+                      <div className="w-8 h-8 rounded-lg bg-[#F1F5F9] text-[#64748B] font-bold text-[12px] flex items-center justify-center group-hover:bg-[#00D4AA] group-hover:text-white transition-colors">
+                        Q{q.id}
+                      </div>
+                      <span className="text-[15px] font-medium text-[#334155] group-hover:text-[#0A2540] flex-1">
                         {q.text}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-[#CBD5E1] group-hover:text-[#00D4AA] group-hover:translate-x-1 transition-all" />
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+                      <div className="w-8 h-8 rounded-full bg-[#F8FAFC] flex items-center justify-center group-hover:bg-[#00D4AA]/10">
+                        <ChevronRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#00D4AA]" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* CTA Form */}
+            {showCTA && (
+              <div className="w-full animate-fade-in-up py-4">
+                <CTAForm />
+              </div>
+            )}
+
           </div>
         )}
-
-        {/* CTA Form */}
-        {showCTA && (
-          <div className="w-full animate-fade-in-up">
-            <CTAForm />
-          </div>
-        )}
-
       </div>
-
-      {/* Input has been removed */}
-
     </div>
   );
 }

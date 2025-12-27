@@ -61,17 +61,48 @@ Create a corresponding JSON file in the data directory. The filename must match 
 
 ---
 
+## Advanced Features
+
+### 1. Infinite Question Branching
+You can create complex decision trees of any depth.
+- Simply point `nextQuestionIds` to a new set of question IDs.
+- You can loop back to previous questions or end a branch by leaving `nextQuestionIds` empty `[]`.
+
+**Example:**
+Q1 -> [Q1a, Q1b] -> Q1a -> [Q1a1, Q1a2] ...
+
+### 2. Dynamic Lead Form Trigger (CTA)
+To make a specific question trigger the "Lead Generation Form" (instead of an answer), add the `"isCTA": true` flag.
+
+```json
+{
+  "id": "final_cta_question",
+  "text": "Ready to transform your business?",
+  "answer": "", 
+  "category": "Action",
+  "icon": "Rocket",
+  "isCTA": true
+}
+```
+**Note**: When `isCTA` is true, the `answer` field is ignored by the bot, but requires a string value (can be empty).
+
+### 3. Lead Generation Popup
+The "Download PDF" button in the header automatically triggers a lead capture popup. No configuration is needed for this; it applies globally to all reports.
+
+---
+
 ## Step 3: Viewing the Report
-Once both files are added, the report is automatically available via dynamic routing.
+Once both files are added, the report is available instantly.
 
 **URL Format:**
 `http://localhost:3000/report?id=your-report-name`
 
-Replace `your-report-name` with the exact filename (excluding `.json`) of the file you created in Step 2.
+Replace `your-report-name` with the filename (without extension) from Step 2.
 
 ---
 
 ## Tips for Best Results
-1. **Markdown Links**: Use `[Text](URL)` in the `answer` field to provide clickable resources during the chat.
-2. **Icons**: Use consistent categories and icons to give the bot a structured feel.
-3. **No Database Needed**: The system reads directly from the filesystem, so you can add reports by simply dropping files into the folders.
+1.  **Deep Linking**: Use the branching feature to guide users from high-level summaries to specific deep-dives.
+2.  **Strategic CTAs**: Place `isCTA` questions at logical "high-intent" moments in the conversation flow (e.g., after explaining pricing or ROI).
+3.  **Rich Text**: You can use Markdown links in answers: `[Click here](https://...)`.
+

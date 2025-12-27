@@ -57,7 +57,28 @@
             "answer": "ZenStream is the new real-time analytics suite features launched in June...",
             "category": "Product",
             "icon": "Zap",
-            "nextQuestionIds": []
+            "nextQuestionIds": [
+                "q1a1",
+                "qEnd"
+            ]
+        },
+        {
+            "id": "q1a1",
+            "text": "How much does ZenStream cost?",
+            "answer": "ZenStream pricing is tier-based, starting at $500/mo for the starter package. Enterprise plans are custom quoted based on data volume.",
+            "category": "Pricing",
+            "icon": "CreditCard",
+            "nextQuestionIds": [
+                "qEnd"
+            ]
+        },
+        {
+            "id": "qEnd",
+            "text": "Ready to transform your own business?",
+            "answer": "",
+            "category": "CTA",
+            "icon": "Rocket",
+            "isCTA": true
         },
         {
             "id": "q1b",

@@ -17,15 +17,6 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
                 <div className="text-[14px] font-semibold text-[#0A2540] truncate" title={title}>
                     {title}
                 </div>
-                {/* External Open Button */}
-                <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[12px] font-medium text-[#00D4AA] hover:underline"
-                >
-                    Open in New Tab
-                </a>
             </div>
 
             {/* Actual PDF Viewer */}

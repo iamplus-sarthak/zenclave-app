@@ -30,11 +30,20 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
     const [globalCharIndex, setGlobalCharIndex] = useState(0);
     const totalChars = useMemo(() => segments.reduce((acc, seg) => acc + seg.content.length, 0), [segments]);
 
+    // Handle completion
     useEffect(() => {
-        if (globalCharIndex >= totalChars) {
-            if (onComplete) onComplete();
-            return;
+        if (globalCharIndex >= totalChars && totalChars > 0) {
+            // Use a small timeout to ensure render frame is updated
+            const timeout = setTimeout(() => {
+                if (onComplete) onComplete();
+            }, 50);
+            return () => clearTimeout(timeout);
         }
+    }, [globalCharIndex, totalChars, onComplete]);
+
+    // Handle typing interval
+    useEffect(() => {
+        if (totalChars === 0) return;
 
         const interval = setInterval(() => {
             setGlobalCharIndex((prev) => {
@@ -47,7 +56,7 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
         }, speed);
 
         return () => clearInterval(interval);
-    }, [globalCharIndex, totalChars, speed, onComplete]);
+    }, [totalChars, speed]);
 
     // Derived render state
     const renderContent = () => {
