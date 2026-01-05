@@ -2,7 +2,8 @@
     "id": "demo-1",
     "title": "Q3 Market Analysis",
     "pdfUrl": "/reports/dummy-report.pdf",
-    "summary": "This report highlights a 14% increase in market share across the APAC region, primarily driven by the new product launch in June. However, supply chain constraints remain a critical bottleneck for Q4 projections.",
+    "summaryQuestion": "What are the key insights from this Q3 analysis?",
+    "summary": "This report highlights a **14% increase** in market share across the APAC region, primarily driven by the new product launch in June. However, **supply chain constraints** remain a critical bottleneck for Q4 projections.",
     "stats": {
         "totalViews": "2,543",
         "avgTime": "4m 12s",
@@ -18,7 +19,7 @@
         {
             "id": "q1",
             "text": "What are the key growth drivers for Q3?",
-            "answer": "The primary growth driver was the successful launch of the 'ZenStream' product line in the APAC region, which contributed to a 14% market share increase. See the [full analysis here](https://example.com/growth). Additionally, a 5% uptick in recurring revenue from legacy contracts supported the bottom line.",
+            "answer": "The primary growth driver was the successful launch of the **ZenStream product line** in the APAC region, which contributed to a **14% market share increase**. See the [full analysis here](https://example.com/growth). Additionally, a **5% uptick** in recurring revenue from legacy contracts supported the bottom line.",
             "category": "Growth",
             "icon": "BarChart3",
             "nextQuestionIds": [

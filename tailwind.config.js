@@ -38,12 +38,17 @@ module.exports = {
                     '0%, 100%': { transform: 'translateY(0)' },
                     '50%': { transform: 'translateY(-10px)' },
                 },
+                shimmer: {
+                    '0%': { backgroundPosition: '-200% center' },
+                    '100%': { backgroundPosition: '200% center' },
+                },
             },
             animation: {
                 'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
                 'slide-in-right': 'slideInRight 0.5s ease-out forwards',
                 'slide-in-left': 'slideInLeft 0.5s ease-out forwards',
                 'float': 'float 6s ease-in-out infinite',
+                'shimmer': 'shimmer 3s ease-in-out infinite',
             },
         },
     },

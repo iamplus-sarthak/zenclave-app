@@ -10,11 +10,11 @@ interface PDFViewerProps {
 
 export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
     return (
-        <div className="w-1/2 flex flex-col h-full bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden">
+        <div className="w-full lg:w-1/2 flex flex-col h-[500px] lg:h-full bg-white border border-[#E2E8F0] rounded-xl lg:rounded-2xl overflow-hidden">
 
             {/* Simple Toolbar */}
-            <div className="h-14 border-b border-[#E2E8F0] bg-white flex items-center justify-between px-4 flex-shrink-0">
-                <div className="text-[14px] font-semibold text-[#0A2540] truncate" title={title}>
+            <div className="h-12 sm:h-14 border-b border-[#E2E8F0] bg-white flex items-center justify-between px-3 sm:px-4 flex-shrink-0">
+                <div className="text-[13px] sm:text-[14px] font-semibold text-[#0A2540] truncate" title={title}>
                     {title}
                 </div>
             </div>
@@ -22,7 +22,7 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
             {/* Actual PDF Viewer */}
             <div className="flex-1 bg-[#525659] overflow-hidden relative">
                 <iframe
-                    src={`${url}#view=FitH`}
+                    src={`${url}#toolbar=0&navpanes=0&scrollbar=1`}
                     className="w-full h-full border-none"
                     title={title}
                 />

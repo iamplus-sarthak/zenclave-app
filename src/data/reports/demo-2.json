@@ -2,6 +2,7 @@
     "id": "demo-2",
     "title": "Modern CI/CD Pipeline Architecture",
     "pdfUrl": "/reports/ci-cd-setup.pdf",
+    "summaryQuestion": "What are the key insights from this CI/CD architecture?",
     "summary": "This technical guide outlines the architecture for a scalable Continuous Integration and Continuous Deployment (CI/CD) pipeline designed for microservices. It covers automated testing strategies, containerization with Docker, and zero-downtime deployment patterns using Kubernetes. Key focus areas include security scanning (DevSecOps), artifact management, and automated rollback mechanisms.",
     "stats": {
         "totalViews": "4,102",

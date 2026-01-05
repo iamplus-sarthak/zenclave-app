@@ -9,22 +9,51 @@ interface TypewriterProps {
 }
 
 interface Segment {
-    type: 'text' | 'link';
+    type: 'text' | 'link' | 'bold';
     content: string;
     href?: string;
 }
 
 export default function Typewriter({ text, speed = 15, onComplete }: TypewriterProps) {
-    // 1. Parse text into segments correctly
+    // 1. Parse text into segments (links, bold, and plain text)
     const segments = useMemo(() => {
-        const parts = text.split(/(\[[^\]]+\]\([^)]+\))/g);
-        return parts.map((part): Segment => {
-            const match = part.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
-            if (match) {
-                return { type: 'link', content: match[1], href: match[2] };
+        // First, split by markdown links [text](url)
+        const parts: Segment[] = [];
+        let remaining = text;
+
+        // Combined regex for links and bold
+        const combinedRegex = /(\[[^\]]+\]\([^)]+\))|(\*\*[^*]+\*\*)/g;
+        let lastIndex = 0;
+        let match;
+
+        while ((match = combinedRegex.exec(text)) !== null) {
+            // Add text before match
+            if (match.index > lastIndex) {
+                parts.push({ type: 'text', content: text.slice(lastIndex, match.index) });
             }
-            return { type: 'text', content: part };
-        });
+
+            // Check if it's a link or bold
+            if (match[1]) {
+                // It's a link
+                const linkMatch = match[1].match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+                if (linkMatch) {
+                    parts.push({ type: 'link', content: linkMatch[1], href: linkMatch[2] });
+                }
+            } else if (match[2]) {
+                // It's bold
+                const boldContent = match[2].replace(/\*\*/g, '');
+                parts.push({ type: 'bold', content: boldContent });
+            }
+
+            lastIndex = match.index + match[0].length;
+        }
+
+        // Add remaining text
+        if (lastIndex < text.length) {
+            parts.push({ type: 'text', content: text.slice(lastIndex) });
+        }
+
+        return parts.length > 0 ? parts : [{ type: 'text', content: text }];
     }, [text]);
 
     const [globalCharIndex, setGlobalCharIndex] = useState(0);
@@ -33,7 +62,6 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
     // Handle completion
     useEffect(() => {
         if (globalCharIndex >= totalChars && totalChars > 0) {
-            // Use a small timeout to ensure render frame is updated
             const timeout = setTimeout(() => {
                 if (onComplete) onComplete();
             }, 50);
@@ -68,7 +96,6 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
             const segLen = segment.content.length;
 
             if (charsRemaining <= 0) {
-                // Not reached yet
                 break;
             }
 
@@ -86,6 +113,12 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
                     >
                         {textSlice}
                     </a>
+                );
+            } else if (segment.type === 'bold') {
+                renderedSegments.push(
+                    <strong key={i} className="font-bold text-[#0A2540]">
+                        {textSlice}
+                    </strong>
                 );
             } else {
                 renderedSegments.push(<span key={i}>{textSlice}</span>);

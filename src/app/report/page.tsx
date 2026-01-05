@@ -19,13 +19,13 @@ export default async function ReportPage(props: { searchParams: Promise<SearchPa
     return (
         <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
             <ReportHeader pdfUrl={report?.pdfUrl} />
-            <div className="flex-shrink-0 pt-4">
+            <div className="flex-shrink-0 pt-2 sm:pt-3 lg:pt-4">
                 <StatsBar stats={report?.stats} />
             </div>
 
-            <main className="flex-1 w-full max-w-[1600px] mx-auto px-6 py-4">
+            <main className="flex-1 w-full max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
                 {report ? (
-                    <div className="flex gap-8 h-[850px] items-stretch">
+                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 lg:h-[850px] items-stretch">
                         <PDFViewer key={`pdf-${report.id}`} title={report.title} url={report.pdfUrl} />
                         <Zenbot key={`bot-${report.id}`} report={report} />
                     </div>

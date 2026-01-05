@@ -2,19 +2,19 @@ import React from 'react';
 
 export default function Services() {
     return (
-        <section id="solutions" className="py-32 px-10 bg-[#F8FAFC]">
-            <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <section id="solutions" className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-10 bg-[#F8FAFC]">
+            <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
                 {/* Left Content */}
                 <div>
-                    <span className="inline-block text-[13px] font-bold text-[#00D4AA] uppercase tracking-widest mb-4">
+                    <span className="inline-block text-[11px] sm:text-[12px] lg:text-[13px] font-bold text-[#00D4AA] uppercase tracking-widest mb-3 sm:mb-4">
                         A BETTER WAY
                     </span>
 
-                    <h2 className="font-display text-[48px] font-extrabold text-[#0A2540] mb-6 tracking-tight">
+                    <h2 className="font-display text-[32px] sm:text-[40px] lg:text-[48px] font-extrabold text-[#0A2540] mb-4 sm:mb-6 tracking-tight">
                         Content <span className="text-[#00D4AA]">You Control</span>
                     </h2>
 
-                    <p className="text-[18px] text-[#64748B] mb-12 leading-relaxed">
+                    <p className="text-[15px] sm:text-[17px] lg:text-[18px] text-[#64748B] mb-8 sm:mb-10 lg:mb-12 leading-relaxed">
                         Zenclave reimagines how professionals consume insights. Our AI-powered reports and videos adapt to your interests, letting you explore topics at your own pace. It's like "choose your own adventure" for professional learning.
                     </p>
 

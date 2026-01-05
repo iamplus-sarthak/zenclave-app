@@ -29,9 +29,9 @@ export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
 
     return (
-        <section className="py-32 px-10 bg-[#F8FAFC]">
+        <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-10 bg-[#F8FAFC]">
             <div className="max-w-[900px] mx-auto">
-                <h2 className="font-display text-[40px] font-extrabold text-[#0A2540] mb-12 text-center tracking-tight">
+                <h2 className="font-display text-[28px] sm:text-[34px] lg:text-[40px] font-extrabold text-[#0A2540] mb-8 sm:mb-10 lg:mb-12 text-center tracking-tight">
                     Frequently Asked Questions
                 </h2>
 
@@ -43,20 +43,20 @@ export default function FAQ() {
                         >
                             <button
                                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                                className="w-full text-left p-6 flex justify-between items-center gap-4 focus:outline-none"
+                                className="w-full text-left p-4 sm:p-5 lg:p-6 flex justify-between items-center gap-3 sm:gap-4 focus:outline-none min-h-[60px]"
                             >
-                                <span className={`font-bold text-[18px] ${openIndex === index ? 'text-[#00D4AA]' : 'text-[#0A2540]'} transition-colors`}>
+                                <span className={`font-bold text-[15px] sm:text-[17px] lg:text-[18px] ${openIndex === index ? 'text-[#00D4AA]' : 'text-[#0A2540]'} transition-colors pr-2`}>
                                     {faq.question}
                                 </span>
                                 <div className={`shrink-0 text-[#00D4AA] transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
-                                    {openIndex === index ? <Minus size={24} /> : <Plus size={24} />}
+                                    {openIndex === index ? <Minus size={20} className="sm:w-6 sm:h-6" /> : <Plus size={20} className="sm:w-6 sm:h-6" />}
                                 </div>
                             </button>
 
                             <div
                                 className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
                             >
-                                <div className="p-6 pt-0 text-[#64748B] text-[16px] leading-relaxed">
+                                <div className="p-4 sm:p-5 lg:p-6 pt-0 text-[#64748B] text-[14px] sm:text-[15px] lg:text-[16px] leading-relaxed">
                                     {faq.answer}
                                 </div>
                             </div>

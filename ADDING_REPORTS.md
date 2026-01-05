@@ -25,7 +25,8 @@ Create a corresponding JSON file in the data directory. The filename must match 
   "id": "your-report-name",
   "title": "Professional Title of the Report",
   "pdfUrl": "/reports/your-report-name.pdf",
-  "summary": "A brief overview displayed at the start of the chat.",
+  "summaryQuestion": "What are the key insights from this report?",
+  "summary": "A brief overview with **bold text** support displayed at the start of the chat.",
   "stats": {
     "totalViews": "1,234",
     "avgTime": "5m 30s",
@@ -104,5 +105,9 @@ Replace `your-report-name` with the filename (without extension) from Step 2.
 ## Tips for Best Results
 1.  **Deep Linking**: Use the branching feature to guide users from high-level summaries to specific deep-dives.
 2.  **Strategic CTAs**: Place `isCTA` questions at logical "high-intent" moments in the conversation flow (e.g., after explaining pricing or ROI).
-3.  **Rich Text**: You can use Markdown links in answers: `[Click here](https://...)`.
+3.  **Rich Text**: Use Markdown formatting in answers:
+    - **Bold**: `**important text**` for emphasis
+    - **Links**: `[Click here](https://...)` for references
+4.  **Dynamic Summary**: Use `summaryQuestion` to customize the initial question heading instead of the default "Executive Summary".
+
 
