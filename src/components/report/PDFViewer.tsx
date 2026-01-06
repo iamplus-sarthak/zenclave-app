@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Search } from 'lucide-react';
 
 interface PDFViewerProps {
@@ -9,6 +9,24 @@ interface PDFViewerProps {
 }
 
 export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        // Detect if device is mobile
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // For mobile, use Google Docs Viewer which works better on mobile browsers
+    const viewerUrl = isMobile
+        ? `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + url)}&embedded=true`
+        : `${url}#toolbar=0&navpanes=0&scrollbar=1`;
+
     return (
         <div className="w-full lg:w-1/2 flex flex-col h-[500px] lg:h-full bg-white border border-[#E2E8F0] rounded-xl lg:rounded-2xl overflow-hidden">
 
@@ -22,7 +40,7 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
             {/* Actual PDF Viewer */}
             <div className="flex-1 bg-[#525659] overflow-hidden relative">
                 <iframe
-                    src={`${url}#toolbar=0&navpanes=0&scrollbar=1`}
+                    src={viewerUrl}
                     className="w-full h-full border-none"
                     title={title}
                 />
