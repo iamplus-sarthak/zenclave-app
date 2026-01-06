@@ -132,11 +132,20 @@ export default function Zenbot({ report }: ZenbotProps) {
         // No next questions defined
         setSuggestedQuestions([]);
       }
+
+
+      // Only reset hasActiveQA if this is the LATEST Q&A item in conversation
+      // This prevents older Q&A items from resetting the flag when re-rendering
+      const qaItems = conversation.filter(c => c.type === 'qa');
+      const isLatestQA = qaItems.length > 0 && qaItems[qaItems.length - 1].id === item.id;
+
+      if (isLatestQA) {
+        setHasActiveQA(false);
+      }
     }
 
     // Set isStreaming to false AFTER updating questions to prevent flash
     setIsStreaming(false);
-    setHasActiveQA(false); // Q&A complete, can show questions now
   };
 
   if (!report) return null;
@@ -241,49 +250,56 @@ export default function Zenbot({ report }: ZenbotProps) {
               </div>
             ))}
 
-            {/* Suggested Questions (Bottom) - Only show when NOT typing/loading */}
-            {!isStreaming && !isInitialLoading && !hasActiveQA && !showCTA && suggestedQuestions.length > 0 && (
-              <div className="pt-4 animate-fade-in-up">
-                <div className="text-[12px] font-bold text-[#94A3B8] uppercase tracking-wider mb-4">
-                  EXPLORE MORE INSIGHTS
+            {(() => {
+              // Check if any Q&A item is currently in thinking state
+              const hasLoadingQA = conversation.some(item => item.type === 'qa' && item.loading);
+
+              // Only show questions if ALL conditions are met
+              const shouldShowQuestions = !isStreaming && !isInitialLoading && !hasActiveQA && !showCTA && suggestedQuestions.length > 0 && !hasLoadingQA;
+
+              return shouldShowQuestions ? (
+                <div className="pt-4 animate-fade-in-up">
+                  <div className="text-[12px] font-bold text-[#94A3B8] uppercase tracking-wider mb-4">
+                    EXPLORE MORE INSIGHTS
+                  </div>
+                  <div className="space-y-3">
+                    {suggestedQuestions.map((q, index) => (
+                      <button
+                        key={q.id}
+                        onClick={() => handleQuestionClick(q)}
+                        className="w-full text-left group bg-white border border-[#E2E8F0] hover:border-[#00D4AA] rounded-xl p-4 flex items-center gap-4 relative overflow-hidden transition-all duration-300 ease-out hover:-translate-y-[2px] hover:scale-[1.01] hover:shadow-lg"
+
+                        style={{ animationDelay: `${index * 150}ms` }}
+                      >
+
+                        {/* Continuous diagonal sweep effect */}
+                        <div className="pointer-events-none absolute top-[-40%] left-[-60%] w-[60%] h-[180%] bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent rotate-12 question-sweep" />
+
+
+
+
+                        <div className="w-8 h-8 rounded-lg bg-[#F1F5F9] text-[#64748B] font-bold text-[12px] flex items-center justify-center group-hover:bg-[#00D4AA] group-hover:text-white transition-colors relative z-10">
+                          Q{q.id}
+                        </div>
+                        <span className="text-[15px] font-medium text-[#334155] flex-1 transition-colors duration-200 group-hover:text-[#00D4AA]">
+                          {q.text}
+                        </span>
+
+
+                        <div className="w-8 h-8 rounded-full bg-[#F8FAFC] flex items-center justify-center group-hover:bg-[#00D4AA]/10">
+                          <ChevronRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#00D4AA]" />
+                        </div>
+
+                        {/* Bottom hover line */}
+                        <span
+                          className="absolute bottom-0 left-0 h-[2px] w-full bg-[#00D4AA] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out" />
+
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-3">
-                  {suggestedQuestions.map((q, index) => (
-                    <button
-                      key={q.id}
-                      onClick={() => handleQuestionClick(q)}
-                      className="w-full text-left group bg-white border border-[#E2E8F0] hover:border-[#00D4AA] rounded-xl p-4 flex items-center gap-4 relative overflow-hidden transition-all duration-300 ease-out hover:-translate-y-[2px] hover:scale-[1.01] hover:shadow-lg"
-
-                      style={{ animationDelay: `${index * 150}ms` }}
-                    >
-
-                      {/* Continuous diagonal sweep effect */}
-                      <div className="pointer-events-none absolute top-[-40%] left-[-60%] w-[60%] h-[180%] bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent rotate-12 question-sweep" />
-
-
-
-
-                      <div className="w-8 h-8 rounded-lg bg-[#F1F5F9] text-[#64748B] font-bold text-[12px] flex items-center justify-center group-hover:bg-[#00D4AA] group-hover:text-white transition-colors relative z-10">
-                        Q{q.id}
-                      </div>
-                      <span className="text-[15px] font-medium text-[#334155] flex-1 transition-colors duration-200 group-hover:text-[#00D4AA]">
-                        {q.text}
-                      </span>
-
-
-                      <div className="w-8 h-8 rounded-full bg-[#F8FAFC] flex items-center justify-center group-hover:bg-[#00D4AA]/10">
-                        <ChevronRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#00D4AA]" />
-                      </div>
-
-                      {/* Bottom hover line */}
-                      <span
-                        className="absolute bottom-0 left-0 h-[2px] w-full bg-[#00D4AA] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out" />
-
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+              ) : null;
+            })()}
 
             {/* CTA Form */}
             {showCTA && (

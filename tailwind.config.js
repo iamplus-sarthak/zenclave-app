@@ -8,7 +8,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['IBM Plex Sans', 'sans-serif'],
+                sans: ['DM Sans', 'system-ui', 'sans-serif'],
                 display: ['Bricolage Grotesque', 'sans-serif'],
             },
             colors: {

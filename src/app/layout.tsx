@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, IBM_Plex_Sans } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({ 
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-display",
 });
 
-const ibmPlexSans = IBM_Plex_Sans({ 
+const dmSans = DM_Sans({
   weight: ['400', '500', '600', '700'],
   subsets: ["latin"],
   variable: "--font-sans",
@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${bricolage.variable} ${ibmPlexSans.variable} antialiased`}
+        className={`${bricolage.variable} ${dmSans.variable} antialiased`}
       >
         {children}
       </body>
