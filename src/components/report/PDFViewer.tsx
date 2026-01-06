@@ -43,7 +43,14 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
                     src={viewerUrl}
                     className="w-full h-full border-none"
                     title={title}
+                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                 />
+
+
+                {/* Overlay to hide Google Docs Viewer's external link button on mobile */}
+                {isMobile && (
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-[#525659] pointer-events-none z-10"></div>
+                )}
             </div>
         </div>
     );
