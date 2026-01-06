@@ -102,7 +102,7 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
             const charsToRender = Math.min(charsRemaining, segLen);
             const textSlice = segment.content.slice(0, charsToRender);
 
-            if (segment.type === 'link') {
+            if (segment.type === 'link' && 'href' in segment) {
                 renderedSegments.push(
                     <a
                         key={i}
