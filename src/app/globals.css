@@ -27,4 +27,27 @@
     line-height: 1.6;
     overflow-x: hidden;
   }
+ @keyframes question-sweep {
+  0% {
+    transform: translateX(-200%) skewX(-18deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  85% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(200%) skewX(-18deg);
+    opacity: 0;
+  }
+}
+
+.question-sweep {
+  animation: question-sweep 0.85s linear infinite;
+}
+
+
+
 }

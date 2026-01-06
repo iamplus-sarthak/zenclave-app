@@ -96,8 +96,8 @@ export default function Zenbot({ report }: ZenbotProps) {
 
     // Add QA item in loading state
     const newId = Date.now().toString();
-    setConversation(prev => [
-      ...prev,
+    setConversation([
+      
       { type: 'qa', question: question.text, answer: null, loading: true, id: newId }
     ]);
 
@@ -121,17 +121,9 @@ export default function Zenbot({ report }: ZenbotProps) {
       setSuggestedQuestions(initialQs.length > 0 ? initialQs : report.questions.slice(0, 3));
     }
 
-    if (item.type === 'qa' && report) {
-      // Find the question object to get next IDs
-      const qObj = report.questions.find(q => q.text === item.question);
-
-      if (qObj && qObj.nextQuestionIds && qObj.nextQuestionIds.length > 0) {
-        const nextQs = report.questions.filter(q => qObj.nextQuestionIds?.includes(q.id));
-        setSuggestedQuestions(nextQs);
-      } else {
-        setSuggestedQuestions([]);
-      }
-    }
+    if (item.type === 'qa') {
+  setSuggestedQuestions([]); 
+}
 
     // Set isStreaming to false AFTER updating questions to prevent flash
     setIsStreaming(false);
@@ -251,29 +243,33 @@ export default function Zenbot({ report }: ZenbotProps) {
                     <button
                       key={q.id}
                       onClick={() => handleQuestionClick(q)}
-                      className="w-full text-left group bg-white border border-[#E2E8F0] hover:border-[#00D4AA] hover:shadow-md rounded-xl p-4 transition-all duration-200 flex items-center gap-4 relative overflow-hidden"
+                      className="w-full text-left group bg-white border border-[#E2E8F0] hover:border-[#00D4AA] rounded-xl p-4 flex items-center gap-4 relative overflow-hidden transition-all duration-300 ease-out hover:-translate-y-[2px] hover:scale-[1.01] hover:shadow-lg"
+
                       style={{ animationDelay: `${index * 150}ms` }}
                     >
-                      {/* Continuous gliding shimmer effect - more visible */}
-                      <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: 'linear-gradient(90deg, transparent 0%, rgba(0, 212, 170, 0.25) 30%, rgba(0, 212, 170, 0.4) 50%, rgba(0, 212, 170, 0.25) 70%, transparent 100%)',
-                          backgroundSize: '200% 100%',
-                          animation: 'shimmer 3s ease-in-out infinite',
-                          animationDelay: `${index * 0.3}s`
-                        }}
-                      ></div>
+                      
+                      {/* Continuous diagonal sweep effect */}
+                 <div className="pointer-events-none absolute top-[-40%] left-[-60%] w-[60%] h-[180%] bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent rotate-12 question-sweep"/>
+
+
+
 
                       <div className="w-8 h-8 rounded-lg bg-[#F1F5F9] text-[#64748B] font-bold text-[12px] flex items-center justify-center group-hover:bg-[#00D4AA] group-hover:text-white transition-colors relative z-10">
                         Q{q.id}
                       </div>
-                      <span className="text-[15px] font-medium text-[#334155] group-hover:text-[#0A2540] flex-1">
-                        {q.text}
-                      </span>
+                     <span className="text-[15px] font-medium text-[#334155] flex-1 transition-colors duration-200 group-hover:text-[#00D4AA]">
+                     {q.text}
+                     </span>
+
+
                       <div className="w-8 h-8 rounded-full bg-[#F8FAFC] flex items-center justify-center group-hover:bg-[#00D4AA]/10">
                         <ChevronRight className="w-4 h-4 text-[#94A3B8] group-hover:text-[#00D4AA]" />
                       </div>
+
+                      {/* Bottom hover line */}
+                  <span
+                   className="absolute bottom-0 left-0 h-[2px] w-full bg-[#00D4AA] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out"/>
+
                     </button>
                   ))}
                 </div>
