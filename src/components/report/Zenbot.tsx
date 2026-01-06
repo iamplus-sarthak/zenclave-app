@@ -96,8 +96,8 @@ export default function Zenbot({ report }: ZenbotProps) {
 
     // Add QA item in loading state
     const newId = Date.now().toString();
-    setConversation([
-      
+    setConversation(prev => [
+      ...prev,
       { type: 'qa', question: question.text, answer: null, loading: true, id: newId }
     ]);
 
@@ -121,9 +121,18 @@ export default function Zenbot({ report }: ZenbotProps) {
       setSuggestedQuestions(initialQs.length > 0 ? initialQs : report.questions.slice(0, 3));
     }
 
-    if (item.type === 'qa') {
-  setSuggestedQuestions([]); 
-}
+    if (item.type === 'qa' && report) {
+      // Find the question object to get next question IDs
+      const qObj = report.questions.find(q => q.text === item.question);
+
+      if (qObj && qObj.nextQuestionIds && qObj.nextQuestionIds.length > 0) {
+        const nextQs = report.questions.filter(q => qObj.nextQuestionIds?.includes(q.id));
+        setSuggestedQuestions(nextQs);
+      } else {
+        // No next questions defined
+        setSuggestedQuestions([]);
+      }
+    }
 
     // Set isStreaming to false AFTER updating questions to prevent flash
     setIsStreaming(false);
@@ -247,9 +256,9 @@ export default function Zenbot({ report }: ZenbotProps) {
 
                       style={{ animationDelay: `${index * 150}ms` }}
                     >
-                      
+
                       {/* Continuous diagonal sweep effect */}
-                 <div className="pointer-events-none absolute top-[-40%] left-[-60%] w-[60%] h-[180%] bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent rotate-12 question-sweep"/>
+                      <div className="pointer-events-none absolute top-[-40%] left-[-60%] w-[60%] h-[180%] bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent rotate-12 question-sweep" />
 
 
 
@@ -257,9 +266,9 @@ export default function Zenbot({ report }: ZenbotProps) {
                       <div className="w-8 h-8 rounded-lg bg-[#F1F5F9] text-[#64748B] font-bold text-[12px] flex items-center justify-center group-hover:bg-[#00D4AA] group-hover:text-white transition-colors relative z-10">
                         Q{q.id}
                       </div>
-                     <span className="text-[15px] font-medium text-[#334155] flex-1 transition-colors duration-200 group-hover:text-[#00D4AA]">
-                     {q.text}
-                     </span>
+                      <span className="text-[15px] font-medium text-[#334155] flex-1 transition-colors duration-200 group-hover:text-[#00D4AA]">
+                        {q.text}
+                      </span>
 
 
                       <div className="w-8 h-8 rounded-full bg-[#F8FAFC] flex items-center justify-center group-hover:bg-[#00D4AA]/10">
@@ -267,8 +276,8 @@ export default function Zenbot({ report }: ZenbotProps) {
                       </div>
 
                       {/* Bottom hover line */}
-                  <span
-                   className="absolute bottom-0 left-0 h-[2px] w-full bg-[#00D4AA] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out"/>
+                      <span
+                        className="absolute bottom-0 left-0 h-[2px] w-full bg-[#00D4AA] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out" />
 
                     </button>
                   ))}
