@@ -2,9 +2,9 @@ import React from 'react';
 
 export default function Hero() {
     return (
-        <section className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-gradient-to-br from-[#F8FAFC] via-[#E0F2FE] to-[#F0FDFA]">
+        <section className="relative min-h-screen flex items-center pt-20 overflow-x-hidden bg-gradient-to-br from-[#F8FAFC] via-[#E0F2FE] to-[#F0FDFA]">
             {/* Background Blob */}
-            <div className="absolute top-[-50%] right-[-20%] w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(0,212,170,0.1)_0%,transparent_70%)] rounded-full animate-float pointer-events-none"></div>
+            <div className="absolute top-[-50%] right-[-20%] w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(0,212,170,0.1)_0%,transparent_70%)] rounded-full animate-float pointer-events-none hidden lg:block"></div>
 
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center relative z-10 w-full py-12 lg:py-0">
                 {/* Content */}
