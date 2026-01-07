@@ -78,34 +78,21 @@ export default function Zenbot({ report }: ZenbotProps) {
     if (question.isCTA) {
       setShowCTA(true);
       setSuggestedQuestions([]);
-      // Optional: Add the question as a "user message" but no bot answer?
-      // User asked: "Answer will not be there for that question... answer will be set as CTA form giving question"
-      // Let's create a QA item but with empty answer/loading false effectively logic-wise,
-      // OR just show CTA.
-      // Showing "Ready to transform?" as a User bubble provides context.
-      // But the design says "like answer will not be there... that will be set as the CTA form giving question".
-      // Let's add the QA item, but bypass Thinking/Answering and just show the CTA form BELOW it.
-      // Actually, if I add it as a QA item, it needs an answer or stays loading.
-      // Let's just NOT add it to conversation, and rely on `showCTA` being true at the bottom?
-      // But then previous content is visible.
-      // Design choice: Just show CTA form at bottom.
+
       return;
     }
 
-    setIsStreaming(true); // Lock interactions
-    setHasActiveQA(true); // Mark that we have an active Q&A
+    setIsStreaming(true);
+    setHasActiveQA(true);
     setSuggestedQuestions([]);
 
-    // Add QA item in loading state
     const newId = Date.now().toString();
     setConversation(prev => [
       ...prev,
       { type: 'qa', question: question.text, answer: null, loading: true, id: newId }
     ]);
 
-    // Thinking Delay (3 seconds)
     setTimeout(() => {
-      // Update item to loaded
       setConversation(prev => prev.map(item => {
         if (item.type === 'qa' && item.id === newId) {
           return { ...item, loading: false, answer: question.answer };
@@ -124,32 +111,27 @@ export default function Zenbot({ report }: ZenbotProps) {
     }
 
     if (item.type === 'qa' && report) {
-      // Find the question object to get next question IDs
       const qObj = report.questions.find(q => q.text === item.question);
 
       if (qObj && qObj.nextQuestionIds && qObj.nextQuestionIds.length > 0) {
         const nextQs = report.questions.filter(q => qObj.nextQuestionIds?.includes(q.id));
         setSuggestedQuestions(nextQs);
       } else {
-        // No next questions defined
         setSuggestedQuestions([]);
       }
 
 
-      // Only reset hasActiveQA if this is the LATEST Q&A item in conversation
-      // This prevents older Q&A items from resetting the flag when re-rendering
       const qaItems = conversation.filter(c => c.type === 'qa');
       const isLatestQA = qaItems.length > 0 && qaItems[qaItems.length - 1].id === item.id;
 
-     if (isLatestQA) {
-  setHasActiveQA(false);
-}
+      if (isLatestQA) {
+        setHasActiveQA(false);
+      }
 
-setActiveSweepIndex(0);
+      setActiveSweepIndex(0);
 
     }
 
-    // Set isStreaming to false AFTER updating questions to prevent flash
     setIsStreaming(false);
   };
 
@@ -256,10 +238,7 @@ setActiveSweepIndex(0);
             ))}
 
             {(() => {
-              // Check if any Q&A item is currently in thinking state
               const hasLoadingQA = conversation.some(item => item.type === 'qa' && item.loading);
-
-              // Only show questions if ALL conditions are met
               const shouldShowQuestions = !isStreaming && !isInitialLoading && !hasActiveQA && !showCTA && suggestedQuestions.length > 0 && !hasLoadingQA;
 
               return shouldShowQuestions ? (
@@ -277,22 +256,22 @@ setActiveSweepIndex(0);
                         style={{ animationDelay: `${index * 150}ms` }}
                       >
 
-                     {activeSweepIndex === index && (
-  <div
-    className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent question-sweep"
-    onAnimationEnd={(e) => {
-  if (e.target !== e.currentTarget) return;
+                        {activeSweepIndex === index && (
+                          <div
+                            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent question-sweep"
+                            onAnimationEnd={(e) => {
+                              if (e.target !== e.currentTarget) return;
 
-  setActiveSweepIndex(prev =>
-    prev === suggestedQuestions.length - 1 ? 0 : prev + 1
-  );
-}}
+                              setActiveSweepIndex(prev =>
+                                prev === suggestedQuestions.length - 1 ? 0 : prev + 1
+                              );
+                            }}
 
 
-  />
-)}
+                          />
+                        )}
 
-                        
+
 
 
 

@@ -12,7 +12,6 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        // Detect if device is mobile
         const checkMobile = () => {
             setIsMobile(window.innerWidth < 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
         };
@@ -22,7 +21,6 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    // For mobile, use Google Docs Viewer which works better on mobile browsers
     const viewerUrl = isMobile
         ? `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + url)}&embedded=true`
         : `${url}#toolbar=0&navpanes=0&scrollbar=1`;

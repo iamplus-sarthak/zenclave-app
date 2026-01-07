@@ -27,20 +27,16 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
         let match;
 
         while ((match = combinedRegex.exec(text)) !== null) {
-            // Add text before match
             if (match.index > lastIndex) {
                 parts.push({ type: 'text', content: text.slice(lastIndex, match.index) });
             }
 
-            // Check if it's a link or bold
             if (match[1]) {
-                // It's a link
                 const linkMatch = match[1].match(/^\[([^\]]+)\]\(([^)]+)\)$/);
                 if (linkMatch) {
                     parts.push({ type: 'link', content: linkMatch[1], href: linkMatch[2] });
                 }
             } else if (match[2]) {
-                // It's bold
                 const boldContent = match[2].replace(/\*\*/g, '');
                 parts.push({ type: 'bold', content: boldContent });
             }
@@ -48,7 +44,6 @@ export default function Typewriter({ text, speed = 15, onComplete }: TypewriterP
             lastIndex = match.index + match[0].length;
         }
 
-        // Add remaining text
         if (lastIndex < text.length) {
             parts.push({ type: 'text', content: text.slice(lastIndex) });
         }
