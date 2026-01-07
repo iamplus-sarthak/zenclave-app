@@ -43,7 +43,6 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
                     src={viewerUrl}
                     className="w-full h-full border-none"
                     title={title}
-                    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                 />
 
 
