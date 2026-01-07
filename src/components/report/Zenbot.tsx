@@ -40,6 +40,8 @@ export default function Zenbot({ report }: ZenbotProps) {
   const [hasActiveQA, setHasActiveQA] = useState(false); // Track if there's an active Q&A being typed
   const [showCTA, setShowCTA] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeSweepIndex, setActiveSweepIndex] = useState(0);
+
 
   // 1. Initial Loading Sequence (4 seconds)
   useEffect(() => {
@@ -139,9 +141,12 @@ export default function Zenbot({ report }: ZenbotProps) {
       const qaItems = conversation.filter(c => c.type === 'qa');
       const isLatestQA = qaItems.length > 0 && qaItems[qaItems.length - 1].id === item.id;
 
-      if (isLatestQA) {
-        setHasActiveQA(false);
-      }
+     if (isLatestQA) {
+  setHasActiveQA(false);
+}
+
+setActiveSweepIndex(0);
+
     }
 
     // Set isStreaming to false AFTER updating questions to prevent flash
@@ -272,8 +277,23 @@ export default function Zenbot({ report }: ZenbotProps) {
                         style={{ animationDelay: `${index * 150}ms` }}
                       >
 
-                        {/* Continuous diagonal sweep effect */}
-                        <div className="pointer-events-none absolute top-[-40%] left-[-60%] w-[60%] h-[180%] bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent rotate-12 question-sweep" />
+                     {activeSweepIndex === index && (
+  <div
+    className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-[#00D4AA]/30 to-transparent question-sweep"
+    onAnimationEnd={(e) => {
+  if (e.target !== e.currentTarget) return;
+
+  setActiveSweepIndex(prev =>
+    prev === suggestedQuestions.length - 1 ? 0 : prev + 1
+  );
+}}
+
+
+  />
+)}
+
+                        
+
 
 
 

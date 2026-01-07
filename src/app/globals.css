@@ -28,26 +28,32 @@
     line-height: 1.6;
     overflow-x: hidden;
   }
- @keyframes question-sweep {
+@keyframes question-sweep {
   0% {
-    transform: translateX(-200%) skewX(-18deg);
+    transform: translateX(-120%);
     opacity: 0;
   }
-  15% {
+  20% {
     opacity: 0.6;
   }
-  85% {
+  80% {
     opacity: 0.6;
   }
   100% {
-    transform: translateX(200%) skewX(-18deg);
+    transform: translateX(120%);
     opacity: 0;
   }
 }
 
 .question-sweep {
-  animation: question-sweep 0.85s linear infinite;
+  animation-name: question-sweep;
+  animation-duration: 0.9s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
 }
+
+
 
 
 
