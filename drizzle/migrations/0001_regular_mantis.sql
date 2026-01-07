@@ -1,0 +1,1 @@
+ALTER TABLE "tenant_documents" ALTER COLUMN "json_config" SET DATA TYPE jsonb;

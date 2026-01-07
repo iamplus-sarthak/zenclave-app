@@ -3,6 +3,7 @@ import StatsBar from "@/components/report/StatsBar";
 import PDFViewer from "@/components/report/PDFViewer";
 import Zenbot from "@/components/report/Zenbot";
 import { getReport } from "@/lib/actions";
+import { getTenetDocumentById } from "@/server";
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,17 @@ interface SearchParams {
 export default async function ReportPage(props: { searchParams: Promise<SearchParams> }) {
     const searchParams = await props.searchParams;
     const id = searchParams.id || "demo-1";
-    const report = await getReport(id);
+
+    // const report = await getReport(id); //old laod from local json
+
+    const document = await getTenetDocumentById(id);
+    const report : any = document ? document.jsonConfig : null;
+
+    report.pdfUrl = document?.url;
+    report.id = document?.id;
+    report.title = document?.title;
+
+    
 
     return (
         <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans">
