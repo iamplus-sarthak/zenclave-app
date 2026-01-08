@@ -21,8 +21,15 @@ export default function PDFViewer({ title = "Report", url }: PDFViewerProps) {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    const getFullUrl = (url: string) => {
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            return url;
+        }
+        return window.location.origin + url;
+    };
+
     const viewerUrl = isMobile
-        ? `https://docs.google.com/viewer?url=${encodeURIComponent(window.location.origin + url)}&embedded=true`
+        ? `https://docs.google.com/viewer?url=${encodeURIComponent(getFullUrl(url))}&embedded=true`
         : `${url}#toolbar=0&navpanes=0&scrollbar=1`;
 
     return (
