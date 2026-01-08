@@ -1,6 +1,7 @@
 {
   "name": "zenclave-app",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,10 +9,13 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "upload-pdf": "node scripts/upload-pdf.js"
   },
   "dependencies": {
+    "@vercel/blob": "^2.0.0",
     "clsx": "^2.1.0",
+    "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.344.0",
